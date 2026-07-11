@@ -1,0 +1,28 @@
+name: Surveillance Vol Porto - Agent Thomas
+
+on:
+  schedule:
+    - cron: '0 8,20 * * *' # S'exécute automatiquement à 8h00 et 20h00
+  workflow_dispatch: # Permet de le lancer manuellement
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installer les dépendances
+        run: |
+          pip install requests beautifulsoup4 playwright
+          python -m playwright install chromium
+
+      - name: Lancer la vérification du Vol
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python vol_porto.py
