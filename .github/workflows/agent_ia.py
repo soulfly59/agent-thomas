@@ -44,7 +44,7 @@ def charger_anciens_biens():
         return set(f.read().splitlines())
 
 def sauvegarder_nouveau_lien(lien):
-    with open(FICHIAM_MEMOIRE, "a") as f:
+    with open(FICHIER_MEMOIRE, "a") as f:
         f.write(lien + "\n")
 
 def surveiller_immoweb():
