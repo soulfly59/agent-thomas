@@ -25,4 +25,4 @@ jobs:
       - name: Lancer l'Agent Thomas
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: python agent_ia.py
+        run: python .github/workflows/agent_ia.py
