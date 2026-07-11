@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
 # ================= CONFIGURATION =================
-DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK"]
+DISCORD_WEBHOOK_URL = os.environ["https://discord.com/api/webhooks/1525519939690041354/5IMMa21opgxhjcTseT0vm8wSkmPk3vOoRULwUXGRCngf4oK6sEeY8h3AJzaWlIprJKCa"]
 
 # Ton vrai lien officiel Google Flights :
 URL_VOL = "https://www.google.com/travel/flights/search?tfs=CBwQAhojEgoyMDI2LTEwLTMwagcIARIDQ1JMcgwIAxIIL20vMHBtbjcaIxIKMjAyNi0xMS0wMWoMCAMSCC9tLzBwbW43cgcIARIDQ1JMQAFIAXABggELCP___________wGYAQE&hl=fr&gl=FR" 
