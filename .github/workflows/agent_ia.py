@@ -5,23 +5,10 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
 # ================= CONFIGURATION =================
-DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK"]
+# On remet ton vrai lien Discord officiel ici en direct !
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1525519939690041354/5IMMa21opgxhjcTSeT0vm8WsKmPk3vOoRULwUXGRcNgf4oK6sEey8h3AJzawlIprJKCa"
 URL_IMMOWEB = "https://www.immoweb.be/fr/recherche/maison-et-appartement/a-louer?countries=BE&priceType=MONTHLY_RENTAL_PRICE&minPrice=800&maxPrice=1200&postalCodes=BE-7070&districts=SOIGNIES&page=1&orderBy=relevance"
 # =================================================
-
-def recuperer_dernier_lien_discord():
-    """L'Agent Thomas va jeter un oeil rapide sur Discord avant de poster"""
-    try:
-        api_url = DISCORD_WEBHOOK_URL.split('/github')[0] if '/github' in DISCORD_WEBHOOK_URL else DISCORD_WEBHOOK_URL
-        response = requests.get(f"{api_url}/messages?limit=1")
-        if response.status_code == 200 and response.json():
-            dernier_message = response.json()[0].get('content', '')
-            for mot in編 := dernier_message.split():
-                if "immoweb.be/fr/annonce" in mot:
-                    return mot
-    except Exception as e:
-        print(f"⚠️ Lecture historique Discord indisponible : {e}")
-    return None
 
 def envoyer_discord(titre, prix, localite, lien_bien):
     texte_message = (
@@ -31,7 +18,7 @@ def envoyer_discord(titre, prix, localite, lien_bien):
         f"💰 **Loyer :** {prix}\n"
         f"🌐 **Lien de l'annonce :** {lien_bien}"
     )
-    data = {"username": "Agent Thomas", "content": text_message}
+    data = {"username": "Agent Thomas", "content": texte_message}
     requests.post(DISCORD_WEBHOOK_URL, json=data)
 
 def surveiller_immoweb():
@@ -72,14 +59,6 @@ def surveiller_immoweb():
         if not lien: return
         if lien.startswith('/'): lien = f"https://www.immoweb.be{lien}"
 
-        id_annonce = lien.split('/')[-1]
-        dernier_lien_discord = recuperer_dernier_lien_discord()
-
-        if d_link := dernier_lien_discord:
-            if id_annonce in d_link:
-                print("😴 Annonce déjà postée en dernier sur Discord. On reste discret.")
-                return
-
         texte_complet = " ".join(premier_bien.get_text(separator=" ").split())
         titre = "🏢 Appartement à louer" if "Appartement" in texte_complet else "🏠 Maison à louer" if "Maison" in texte_complet else "Logement trouvé"
         
@@ -92,7 +71,7 @@ def surveiller_immoweb():
                     break
                 prix = mot
 
-        print(f"🆕 Nouveau bien détecté ! Envoi de la notification...")
+        print(f"🆕 Bien détecté ! Envoi à Discord...")
         envoyer_discord(titre, prix, "Soignies / Le Rœulx", lien)
 
     except Exception as e:
